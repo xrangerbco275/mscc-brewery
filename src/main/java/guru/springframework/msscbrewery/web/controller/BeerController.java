@@ -12,6 +12,7 @@ import java.util.UUID;
 /**
  * Created by jt on 2019-04-20.
  */
+@Deprecated
 @RequestMapping("/api/v1/beer")
 @RestController
 public class BeerController
@@ -49,5 +50,12 @@ public class BeerController
         beerService.updateBeer(beerId, beerDto);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping({"/{beerId}"})
+    @ResponseStatus
+    public void deleteBeer(@PathVariable("beerId") UUID beerId)
+    {
+        beerService.deleteBeer(beerId);
     }
 }
