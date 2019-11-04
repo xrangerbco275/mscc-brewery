@@ -22,7 +22,7 @@ public class BeerServiceImpl implements BeerService
     public BeerDto getBeerById(UUID beerId)
     {
         return BeerDto.builder().id(UUID.randomUUID())
-                .beerName("Galaxy Cat")
+                .beerName("Crazy Cat")
                 .beerStyle("Pale Ale")
                 .build();
     }
@@ -42,6 +42,12 @@ public class BeerServiceImpl implements BeerService
     @Override
     public void deleteById(UUID beerId) {
         log.debug("Deleting a beer...");
+    }
+
+    @Override
+    public void deleteBeer(UUID beerId)
+    {
+
     }
 
 
