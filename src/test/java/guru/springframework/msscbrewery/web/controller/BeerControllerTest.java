@@ -2,9 +2,10 @@ package guru.springframework.msscbrewery.web.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import guru.springframework.msscbrewery.services.BeerService;
+import guru.springframework.msscbrewery.services.v2.BeerServiceV2;
+import guru.springframework.msscbrewery.web.controller.v2.BeerControllerV2;
 import guru.springframework.msscbrewery.web.model.BeerDto;
-import guru.springframework.msscbrewery.web.model.v2.BeerStyleEnum;
+import guru.springframework.msscbrewery.web.model.v2.BeerDtoV2;
 import org.hamcrest.core.Is;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,11 +24,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.UUID;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(BeerController.class)
+@WebMvcTest(BeerControllerV2.class)
 public class BeerControllerTest
 {
     @MockBean
-    BeerService beerService;
+    BeerServiceV2 beerService;
 
     @Autowired
     MockMvc mockMvc;
@@ -35,9 +36,9 @@ public class BeerControllerTest
     @Autowired
     ObjectMapper objectMapper;
 
-    BeerDto validBeer;
+    BeerDtoV2 validBeer;
 
-    private static final String beerServiceUri = "/api/v1/beer/";
+    private static final String beerServiceUri = "/api/v2/beer/";
 
     @Before
     public void setUp()
@@ -61,9 +62,9 @@ public class BeerControllerTest
     @Test
     public void handlePost() throws Exception
     {
-        BeerDto beerDto = getValidBeerDto();
+        BeerDtoV2 beerDto = getValidBeerDto();
         beerDto.setId(null);
-        BeerDto savedDto = BeerDto.builder().id(UUID.randomUUID()).beerName("New Beer").build();
+        BeerDtoV2 savedDto = BeerDtoV2.builder().id(UUID.randomUUID()).beerName("New Beer").build();
         String beeerDtoJson = objectMapper.writeValueAsString(beerDto);
 
         BDDMockito.given(beerService.saveNewBeer(ArgumentMatchers.any())).willReturn(savedDto);
@@ -77,7 +78,7 @@ public class BeerControllerTest
     @Test
     public void handleUpdate() throws Exception
     {
-        BeerDto beerDto = validBeer;
+        BeerDtoV2 beerDto = validBeer;
         beerDto.setId(null);
         String beerDtoJson = objectMapper.writeValueAsString(beerDto);
 
@@ -88,12 +89,12 @@ public class BeerControllerTest
         BDDMockito.then(beerService).should().updateBeer(ArgumentMatchers.any(), ArgumentMatchers.any());
     }
 
-    BeerDto getValidBeerDto()
+    BeerDtoV2 getValidBeerDto()
     {
-        return BeerDto.builder()
+        return BeerDtoV2.builder()
                 .id(UUID.randomUUID())
                 .beerName("Beer1")
-                .beerStyle(BeerStyleEnum.ALE.toString())
+                // .beerStyle(BeerStyleEnum.ALE.toString())
                 .upc(123456789012L)
                 .build();
     }
